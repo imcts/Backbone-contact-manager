@@ -17,8 +17,8 @@ export default class ContactForm extends View {
 
 	submit () {
 		this.clearError()
-		if (this.isValid()) {
-			this.addContact()
+		if (this.isAdded()) {
+			this.moveToHome()
 		}
 	}
 
@@ -27,14 +27,18 @@ export default class ContactForm extends View {
 		this.$helps.text('')
 	}
 
-	isValid () {
-		const attributes = this.getAttributes()
-		const errors = this.model.validate(attributes)
+	isAdded () {
+		const errors = this.addContact()
 		if (errors) {
-			errors.forEach(this.reportError, this)
+			this.reportError(errors)
 			return false
 		}
 		return true
+	}
+
+	addContact () {
+		const newContact = this.collection.create({ id: this.makeNewId(), ...this.getAttributes() }, { wait: true })
+		return newContact.validationError
 	}
 
 	getAttributes () {
@@ -43,28 +47,6 @@ export default class ContactForm extends View {
 			email: this.$email.val(),
 			phone: this.$phone.val()
 		}
-	}
-
-	reportError (error, index) {
-		this
-			.$(error.className)
-			.addClass(CONTACT_FORM_VIEW.ERROR_CLASS_NAME)
-			.find(CONTACT_FORM_VIEW.HELP_SELECTOR)
-			.text(error.message)
-	}
-
-	addContact () {
-		this.makeNewModel()
-		this.moveToHome()
-	}
-
-	makeNewModel () {
-		this.collection.create({
-			id: this.makeNewId(),
-			name: this.$name.val(),
-			email: this.$email.val(),
-			phone: this.$phone.val()
-		})
 	}
 
 	makeNewId () {
@@ -76,11 +58,32 @@ export default class ContactForm extends View {
 		return lastestId + 1
 	}
 
+	reportError (errors) {
+		errors.forEach(this.drawError, this)
+	}
+
+	drawError (error, index) {
+		this
+			.$(error.className)
+			.addClass(CONTACT_FORM_VIEW.ERROR_CLASS_NAME)
+			.find(CONTACT_FORM_VIEW.HELP_SELECTOR)
+			.text(error.message)
+	}
+
 	modify () {
 		this.clearError()
-		if (this.isValid()) {
-			this.modifyContact()
+		if (this.isModified()) {
+			this.moveToHome()
 		}
+	}
+
+	isModified () {
+		const isError = this.modifyModel()
+		if (isError) {
+			this.reportError(this.model.validationError)
+			return false
+		}
+		return true
 	}
 
 	modifyContact () {
@@ -89,11 +92,7 @@ export default class ContactForm extends View {
 	}
 
 	modifyModel () {
-		this.model.save({
-			name: this.$name.val(),
-			email: this.$email.val(),
-			phone: this.$phone.val()
-		})
+		return !this.model.save(this.getAttributes(), { wait: true })
 	}
 
 	moveToHome () {
