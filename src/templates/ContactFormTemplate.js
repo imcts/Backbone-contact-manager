@@ -9,21 +9,21 @@ const template = `
 		<div class="_contents _name">
 			<label class="col-sm-4 control-label">Full name:</label>
 			<div class="col-sm-6">
-				<input type="text" class="form-control _input-name" value="<%=name%>11" placeholder="please enter your name.">
+				<input type="text" class="form-control _input-name" value="<%=name%>" placeholder="please enter your name.">
 				<small class="help-block _help"></small>
 			</div>
 		</div>
 		<div class="_contents _email">
 			<label class="col-sm-4 control-label">Email address:</label>
 			<div class="col-sm-6">
-				<input type="email" class="form-control _input-email" value="<%=email%>imcts@nate.com" placeholder="please enter your email">
+				<input type="email" class="form-control _input-email" value="<%=email%>" placeholder="please enter your email">
 				<small class="help-block _help"></small>
 			</div>
 		</div>
 		<div class="_contents _phone">
 			<label class="col-sm-4 control-label">Telephone number:</label>
 			<div class="col-sm-6">
-				<input type="tel" class="form-control _input-phone" value="<%=phone%>123" placeholder="please enter your cell phone number">
+				<input type="tel" class="form-control _input-phone" value="<%=phone%>" placeholder="please enter your cell phone number">
 				<small class="help-block _help"></small>
 			</div>
 		</div>
