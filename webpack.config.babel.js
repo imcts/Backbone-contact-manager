@@ -2,7 +2,7 @@ import path from 'path'
 
 export default {
 	target: 'web',
-	entry: './src/app.js',
+	entry: './src/App.js',
 	output: {
 		filename: 'bundle.js',
 		path: path.resolve(__dirname, 'dist')
@@ -16,7 +16,7 @@ export default {
 				use: {
 					loader: 'babel-loader',
 					options: {
-						presets: ['es2015'],
+						presets: ['es2015', 'stage-0'],
 						plugins: ['transform-runtime']
 					}
 				}
